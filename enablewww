@@ -1,0 +1,87 @@
+#!/bin/bash
+
+if [ -z "$2" ]; then
+	echo usage: $0 username domainname
+	echo -domainname includes the .com/net/org
+	exit
+fi
+USER=$1
+DOMAIN=$2
+
+#create a user if they dont exist
+USER_NOEXIST=`finger $USER|grep "no such user."`
+if [ -n "$USER_NOEXIST" ]; then
+	#if they dont exist but have a home directory, move it
+	if [ -d "/home/$USER" ]; then
+		mv /home/$USER /home/tmp$USER
+	fi
+	useradd -d /home/$USER $USER	
+
+	#clean up
+	if [ -d "/home/tmp$USER" ]; then
+		mv /home/tmp$USER/* /home/$USER/.
+		rmdir /home/tmp$USER
+	fi
+fi
+
+#create the directories if needed
+if [ ! -d "/home/$USER" ]; then
+	mkdir /home/$USER
+fi
+
+if [ ! -d "/home/$USER/www" ]; then
+	mkdir /home/$USER/www
+fi
+
+if [ ! -d "/home/$USER/www/$DOMAIN" ]; then
+	mkdir /home/$USER/www/$DOMAIN
+fi
+
+if [ ! -d "/home/$USER/www/$DOMAIN/htdocs" ]; then
+	mkdir /home/$USER/www/$DOMAIN/htdocs
+fi
+
+if [ ! -d "/home/$USER/www/$DOMAIN/html" ]; then
+	ln -s /home/$USER/www/$DOMAIN/htdocs /home/$USER/www/$DOMAIN/html
+fi
+
+if [ ! -d "/home/$USER/www/$DOMAIN/logs" ]; then
+	mkdir /home/$USER/www/$DOMAIN/logs
+fi
+
+
+
+#set permissions and ownership
+chown -R $USER /home/$USER
+chmod -R 755 /home/$USER/www
+chown $USER:www-data /home/$USER/www
+chmod 711 /home/$USER
+
+#add the vhosts creation + symlinking and apache cycle
+echo "#
+#   $DOMAIN (/etc/httpd/sites-available/$DOMAIN.conf)
+#
+<VirtualHost *:80>
+        ServerAdmin admin@$DOMAIN
+        ServerName $DOMAIN
+        ServerAlias www.$DOMAIN *.$DOMAIN
+
+        #Indexes + Directory Root
+        DocumentRoot /home/$USER/www/$DOMAIN/htdocs/
+
+        <Directory \"/home/$USER/www/$DOMAIN/html\">
+                Options Indexes FollowSymLinks MultiViews
+                AllowOverride All
+                Order allow,deny
+                Allow from all
+        </Directory>
+
+        #LOG FILES
+        ErrorLog  /home/$USER/www/$DOMAIN/logs/error.log
+        CustomLog /home/$USER/www/$DOMAIN/logs/access.log combined
+</VirtualHost>" > /etc/httpd/sites-available/$DOMAIN.conf
+
+ln -s /etc/httpd/sites-available/$DOMAIN.conf /etc/httpd/sites-enabled/$DOMAIN.conf
+/etc/init.d/httpd reload
+
+#add in DNS information
