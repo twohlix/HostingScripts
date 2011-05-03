@@ -1,0 +1,12 @@
+#!/bin/bash
+
+if [ -z "$2" ]; then
+	echo usage: $0 username domainname
+	echo -domainname includes the .com/net/org
+	exit
+fi
+USER=$1
+DOMAIN=$2
+
+#remove the symlink from apache
+rm -f /etc/httpd/sites-enabled/$DOMAIN.conf
