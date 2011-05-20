@@ -85,3 +85,28 @@ ln -s /etc/httpd/sites-available/$DOMAIN.conf /etc/httpd/sites-enabled/$DOMAIN.c
 /etc/init.d/httpd reload
 
 #add in DNS information
+echo "\$TTL 3d
+@       IN      SOA     $DOMAIN.       admin.twohlix.com (
+                        2011050105      ; serial #
+                        4H              ; refresh
+                        1H              ; retry
+                        1W              ; expiry
+                        1D )            ; minimum
+        IN      NS      ns1.twohlix.com.
+        IN      NS      ns2.twohlix.com.
+
+$DOMAIN. IN A 184.172.129.159
+www.$DOMAIN. IN CNAME $DOMAIN.
+
+
+localhost.$DOMAIN. IN A 127.0.0.1" > /var/named/$DOMAIN
+ln -s /var/named/$DOMAIN /var/named/$DOMAIN.hosts
+
+echo "zone \"$DOMAIN\" {
+        type master;
+        notify no;
+        allow-query { any; };
+        file \"/var/named/$DOMAIN.hosts\";
+};" >> /etc/named.conf
+/etc/init.d/named restart
+
