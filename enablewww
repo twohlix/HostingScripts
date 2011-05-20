@@ -85,9 +85,10 @@ ln -s /etc/httpd/sites-available/$DOMAIN.conf /etc/httpd/sites-enabled/$DOMAIN.c
 /etc/init.d/httpd reload
 
 #add in DNS information
+SERIAL = $(date +%Y%m%d%M)
 echo "\$TTL 3d
 @       IN      SOA     $DOMAIN.       admin.twohlix.com (
-                        2011050105      ; serial #
+                        $SERIAL         ; serial #
                         4H              ; refresh
                         1H              ; retry
                         1W              ; expiry
