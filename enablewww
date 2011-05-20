@@ -103,13 +103,20 @@ www.$DOMAIN. IN CNAME $DOMAIN.
 localhost.$DOMAIN. IN A 127.0.0.1" > /var/named/$DOMAIN
 ln -s /var/named/$DOMAIN /var/named/$DOMAIN.hosts
 
-#add the domain to the named.conf
-$
-echo "zone \"$DOMAIN\" {
+#maybe add the domain to the named.conf
+NOAPPEND=`grep -w \"$DOMAIN\" /etc/named.conf`
+if [ -z "$NOAPPEND" ]; then
+ echo "adding $DOMAIN to /etc/named.conf"
+
+ echo "zone \"$DOMAIN\" {
         type master;
         notify no;
         allow-query { any; };
         file \"/var/named/$DOMAIN.hosts\";
 };" >> /etc/named.conf
+else
+ echo "$DOMAIN already found in /etc/named.conf, NOT adding it"
+fi
+
 /etc/init.d/named restart
 
