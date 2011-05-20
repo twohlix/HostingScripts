@@ -1,1 +1,19 @@
 These are basic scripts used to make hosting simpler on my CentOS setup
+
+enablewww username domainincluding.com
+ enablewww enables hosting for the specified domain and username.
+ If the user doesnt exist it will create it, so you probably have to run this as sudo.
+ This creates a directory structure under /home/username/ and should set permissions properly.
+ It also creates the vhosts file for apache and the configuration for named (the DNS service).
+ THIS OVERWRITES CONFIGURATIONS for now
+
+disablewww username domainincluding.com
+ disablewww disables the hosting for the specified domain under the user.
+ This just destroys symlinks and no actual configurations.
+
+listwww
+ listwww lists all the enabled sites on this server
+ It's a nice way of seeing which vhosts are being used 
+
+
+last update: 05.20.2011

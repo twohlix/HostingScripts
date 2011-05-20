@@ -10,3 +10,6 @@ DOMAIN=$2
 
 #remove the symlink from apache
 rm -f /etc/httpd/sites-enabled/$DOMAIN.conf
+
+#remove the symlink from named
+rm -f /var/named/$DOMAIN.hosts
