@@ -1,0 +1,25 @@
+#!/bin/bash
+
+if [ -n "$1" ]; then
+	echo usage: $0 
+	exit
+fi
+
+SPACER="#---------------#"
+
+#ln -s /etc/httpd/sites-available/$DOMAIN.conf /etc/httpd/sites-enabled/$DOMAIN.conf
+#ln -s /var/named/$DOMAIN /var/named/$DOMAIN.hosts
+
+#get an apache enabled list and output that
+APACHE_ENABLED=`ls -1 /etc/httpd/sites-enabled/ | grep ".conf" | sed s/.conf//`
+APACHE_COUNT=`echo -e "$APACHE_ENABLED" | wc -l`
+if [ -n "$APACHE_ENABLED" ]; then
+ echo $SPACER
+ echo "Apache Enabled Sites: $APACHE_COUNT"
+ echo "$APACHE_ENABLED" 
+else
+ echo $SPACER
+ echo "There are no detected Apache Enabled Sites"
+fi
+
+
