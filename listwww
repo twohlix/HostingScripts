@@ -5,7 +5,7 @@ if [ -n "$1" ]; then
 	exit
 fi
 
-SPACER="#---------------#"
+SPACER="#-----------------------------------------#"
 
 #ln -s /etc/httpd/sites-available/$DOMAIN.conf /etc/httpd/sites-enabled/$DOMAIN.conf
 #ln -s /var/named/$DOMAIN /var/named/$DOMAIN.hosts
@@ -33,3 +33,6 @@ else
  echo $SPACER
  echo "There are no detected DNS Hosted Sites"
 fi
+
+
+echo $SPACER

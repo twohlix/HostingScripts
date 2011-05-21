@@ -85,7 +85,9 @@ ln -s /etc/httpd/sites-available/$DOMAIN.conf /etc/httpd/sites-enabled/$DOMAIN.c
 /etc/init.d/httpd reload
 
 #add in DNS information
-SERIAL= `date +%Y%m%d%M`
+HOST_CHECK=`ls /var/named/$DOMAIN`
+if [ -z "$HOST_CHECK" ]; then
+SERIAL=`date +%Y%m%d%M`
 echo "\$TTL 3d
 @       IN      SOA     $DOMAIN.       admin.twohlix.com (
                         $SERIAL         ; serial #
@@ -101,6 +103,7 @@ www.$DOMAIN. IN CNAME $DOMAIN.
 
 
 localhost.$DOMAIN. IN A 127.0.0.1" > /var/named/$DOMAIN
+fi
 ln -s /var/named/$DOMAIN /var/named/$DOMAIN.hosts
 
 #maybe add the domain to the named.conf
