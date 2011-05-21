@@ -22,4 +22,14 @@ else
  echo "There are no detected Apache Enabled Sites"
 fi
 
-
+#get some DNS information
+DNS_ZONES=`cat /etc/named.conf | grep -w "zone" | sed 's/.*"\([^"]*\)".*/\1/'`
+DNS_COUNT=`echo -e "$DNS_ZONES" | wc -l`
+if [ -n "$DNS_ZONES" ]; then
+ echo $SPACER
+ echo "DNS Hosted Sites: $DNS_COUNT"
+ echo "$DNS_ZONES"
+else
+ echo $SPACER
+ echo "There are no detected DNS Hosted Sites"
+fi
