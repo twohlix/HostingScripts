@@ -14,6 +14,7 @@ source hosting.conf
 #create a user if they dont exist
 USER_NOEXIST=`finger "$USER"|grep "no such user."`
 if [ -n "$USER_NOEXIST" ]; then
+	#use grep "^$i" /etc/passwd | cut -d: -f6 
 	#if they dont exist but have a home directory, move it
 	if [ -d "/home/$USER" ]; then
 		mv /home/$USER /home/tmp$USER
