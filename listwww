@@ -5,13 +5,16 @@ if [ -n "$1" ]; then
 	exit
 fi
 
+#read some configuration files
+source hosting.conf
+
 SPACER="#-----------------------------------------#"
 
-#ln -s /etc/httpd/sites-available/$DOMAIN.conf /etc/httpd/sites-enabled/$DOMAIN.conf
-#ln -s /var/named/$DOMAIN /var/named/$DOMAIN.hosts
+#ln -s "$HTTPD_HOSTS_AVAIL$DOMAIN.conf" "HTTPD_HOSTS_EN$DOMAIN.conf"
+#ln -s "$NAMED_HOSTS$DOMAIN" "$NAMED_HOSTS$DOMAIN.hosts"
 
 #get an apache enabled list and output that
-APACHE_ENABLED=`ls -1 /etc/httpd/sites-enabled/ | grep ".conf" | sed s/.conf//`
+APACHE_ENABLED=`ls -1 "$HTTPD_HOSTS_EN" | grep ".conf" | sed s/.conf//`
 APACHE_COUNT=`echo -e "$APACHE_ENABLED" | wc -l`
 if [ -n "$APACHE_ENABLED" ]; then
  echo $SPACER
@@ -23,7 +26,7 @@ else
 fi
 
 #get some DNS information
-DNS_ZONES=`cat /etc/named.conf | grep -w "zone" | sed 's/.*"\([^"]*\)".*/\1/'`
+DNS_ZONES=`cat "$NAMED_CONF" | grep -w "zone" | sed 's/.*"\([^"]*\)".*/\1/'`
 DNS_COUNT=`echo -e "$DNS_ZONES" | wc -l`
 if [ -n "$DNS_ZONES" ]; then
  echo $SPACER

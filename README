@@ -15,6 +15,9 @@ listwww
  listwww lists all the enabled sites on this server
  It's a nice way of seeing which vhosts are being used 
 
+hosting.conf
+ hosting.conf is a file that contains some configuration variables for the system
+ Modify this to adjust these scripts for your system.
 
-last update: 05.20.2011
+last update: 06.09.2011
 http://www.github.com/twohlix/

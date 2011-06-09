@@ -8,8 +8,13 @@ fi
 USER=$1
 DOMAIN=$2
 
+#read the config file
+source hosting.conf
+
 #remove the symlink from apache
-rm -f /etc/httpd/sites-enabled/$DOMAIN.conf
+rm -f $HTTPD_HOSTS_EN$DOMAIN.conf
+
+#remove the zone from named
 
 #remove the symlink from named
-rm -f /var/named/$DOMAIN.hosts
+rm -f $NAMED_HOSTS$DOMAIN.hosts
