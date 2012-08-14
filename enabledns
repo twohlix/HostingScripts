@@ -1,0 +1,51 @@
+#!/bin/bash
+
+if [ -z "$2" ]; then
+	echo usage: $0 username domainname
+	echo -domainname includes the .com/net/org and subdomain if needed
+	exit
+fi
+USER=$1
+DOMAIN=$2
+
+#read configuration from file
+source hosting.conf
+
+#add in DNS information
+HOST_CHECK=`ls "$NAMED_HOSTS$DOMAIN"`
+if [ -z "$HOST_CHECK" ]; then
+SERIAL=`date +%Y%m%d%M`
+echo "\$TTL 3d
+@       IN      SOA     $DOMAIN.       admin.twohlix.com (
+                        $SERIAL         ; serial #
+                        4H              ; refresh
+                        1H              ; retry
+                        1W              ; expiry
+                        1D )            ; minimum
+        IN      NS      ns1.twohlix.com.
+        IN      NS      ns2.twohlix.com.
+
+$DOMAIN. IN A 184.172.129.159
+www.$DOMAIN. IN CNAME $DOMAIN.
+
+localhost.$DOMAIN. IN A 127.0.0.1" > "$NAMED_HOSTS$DOMAIN"
+fi
+ln -s "$NAMED_HOSTS$DOMAIN" "$NAMED_HOSTS$DOMAIN.hosts"
+
+#maybe add the domain to the named.conf
+NOAPPEND=`grep -w \"$DOMAIN\" "$NAMED_CONF"`
+if [ -z "$NOAPPEND" ]; then
+ echo "adding $DOMAIN to $NAMED_CONF"
+
+ echo "zone \"$DOMAIN\" {
+        type master;
+        notify no;
+        allow-query { any; };
+        file \"$NAMED_HOSTS$DOMAIN.hosts\";
+};" >> "$NAMED_CONF"
+else
+ echo "$DOMAIN already found in $NAMED_CONF, NOT adding it"
+fi
+
+"$NAMED_PATH" restart
+

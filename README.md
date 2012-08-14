@@ -9,6 +9,10 @@ These are basic scripts used to make hosting simpler on my CentOS setup
  It also creates the vhosts file for apache and the configuration for named (the DNS service).
  THIS OVERWRITES CONFIGURATIONS for now
 
+##enabledns
+`enabledns username domaincluding.com`
+ _enabledns_ enables domain name hosting on your self-hosted name server.
+
 ##disablewww
 `disablewww username domainincluding.com`
  _disablewww_ disables the hosting for the specified domain under the user.
@@ -22,6 +26,6 @@ These are basic scripts used to make hosting simpler on my CentOS setup
 ##hosting.conf
  _hosting.conf_ is a file that contains some configuration variables for the system
  Modify this to adjust these scripts for your system.
-
-last update: 06.09.2011
+ An ubuntu setup is provided in hosting.ubuntu.conf. Overwrite hosting.conf with that for ubuntu.
+last update: 08.14.2012
 http://www.github.com/twohlix/

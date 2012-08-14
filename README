@@ -7,6 +7,9 @@ enablewww username domainincluding.com
  It also creates the vhosts file for apache and the configuration for named (the DNS service).
  THIS OVERWRITES CONFIGURATIONS for now
 
+enabledns username domainincluding.com
+ enabledns enables dns for your self hosted name server.
+
 disablewww username domainincluding.com
  disablewww disables the hosting for the specified domain under the user.
  This just destroys symlinks and no actual configurations.
@@ -18,6 +21,7 @@ listwww
 hosting.conf
  hosting.conf is a file that contains some configuration variables for the system
  Modify this to adjust these scripts for your system.
+ An ubuntu version is provided in hosting.ubuntu.conf. Overwrite hosting.conf with that for ubunut.
 
-last update: 06.09.2011
+last update: 08.14.2012
 http://www.github.com/twohlix/
