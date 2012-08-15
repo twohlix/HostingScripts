@@ -12,7 +12,7 @@ DOMAIN=$2
 source hosting.conf
 
 #create a user if they dont exist
-USER_NOEXIST=`finger "$USER"|grep "no such user."`
+USER_NOEXIST=`id "$USER" 2>&1| grep -i "no such user"`
 if [ -n "$USER_NOEXIST" ]; then
 	#use grep "^$i" /etc/passwd | cut -d: -f6 
 	#if they dont exist but have a home directory, move it
@@ -58,7 +58,7 @@ fi
 #set permissions and ownership
 chown -R $USER /home/$USER
 chmod -R 755 /home/$USER/www
-chown $USER:www-data /home/$USER/www
+chown -R $USER:www-data /home/$USER/www
 chmod 711 /home/$USER
 
 #add the vhosts creation + symlinking and apache cycle
