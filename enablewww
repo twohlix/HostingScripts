@@ -9,7 +9,7 @@ USER=$1
 DOMAIN=$2
 
 #read configuration from file
-source hosting.conf
+source `dirname $0`/hosting.conf
 
 #create a user if they dont exist
 USER_NOEXIST=`finger "$USER"|grep "no such user."`
